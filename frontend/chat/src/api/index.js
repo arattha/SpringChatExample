@@ -11,4 +11,16 @@ function createAxiosService(){
     )
 }
 
+function createNickService(){
+    return axios.create(
+        {
+            baseURL: 'https://nickname.hwanmoo.kr/',
+            headers: {
+                'Content-type' : 'application/json',
+            },
+        }
+    )
+}
+
 export const axiosService = createAxiosService();
+export const nicknameService = createNickService();

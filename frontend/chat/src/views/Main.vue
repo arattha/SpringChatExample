@@ -29,8 +29,6 @@ export default {
     getRooms(){
       getChatRooms(
       (res) => {
-        console.log("??");
-        console.log(res);
         this.roomList = res.data;
       },
       (err) => {
@@ -50,8 +48,7 @@ export default {
       )
     },
     move(item){
-      console.log(item);
-      //this.$router.push( {name:'Room' , params : { roomId : id } });
+      this.$router.push( {name:'Room' , params : { roomId : item.roomId } });
     }
   }
 }
