@@ -3,7 +3,7 @@ import axios from "axios";
 function createAxiosService(){
     return axios.create(
         {
-            baseURL: 'http://localhost:8080/chat',
+            baseURL: 'http://10.10.1.85:8080',
             headers: {
                 'Content-type' : 'application/json',
             },

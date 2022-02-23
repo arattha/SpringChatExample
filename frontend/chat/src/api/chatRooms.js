@@ -11,9 +11,9 @@ async function getChatRooms(callback, errorCallback){
         });
 }
 
-async function createChatRoom(name, callback, errorCallback){
+async function createChatRoom(data, callback, errorCallback){
     await axiosService
-        .post('/room', name)
+        .post('/room', JSON.stringify(data))
         .then((res) => {
             callback(res);
         })
