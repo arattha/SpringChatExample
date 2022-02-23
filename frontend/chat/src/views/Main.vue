@@ -7,15 +7,15 @@
       >
       <a @click.prevent="move(item)">{{item.name}}</a>
       </div>
-      <div><input v-model="newRoomName"/> <button @click="createRoom()">채팅방 생성</button></div>
+      <div><input v-model=newRoomName /> <button @click="createRoom()">채팅방 생성</button></div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { getChatRooms, createChatRoom } from "@/api/chatRooms.js";
 
 export default {
-
   data(){
     return {
       newRoomName : "",
@@ -26,6 +26,7 @@ export default {
     this.getRooms();
   },
   methods : {
+    ...mapActions(['set_roomId']),
     getRooms(){
       getChatRooms(
       (res) => {
@@ -37,8 +38,11 @@ export default {
     );
     },
     createRoom(){
+      let data = {
+        roomName : this.newRoomName
+      }
       createChatRoom(
-        this.newRoomName,
+        data,
         () => {
           this.getRooms();
         },
@@ -48,7 +52,9 @@ export default {
       )
     },
     move(item){
-      this.$router.push( {name:'Room' , params : { roomId : item.roomId } });
+      console.log("이동중" , item.roomId);
+      this.set_roomId(item.roomId);
+      this.$router.push( {name:'Room'});
     }
   }
 }

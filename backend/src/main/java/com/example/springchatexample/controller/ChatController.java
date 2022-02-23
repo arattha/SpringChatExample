@@ -15,21 +15,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Slf4j
 public class ChatController {
 
-//    @MessageMapping(value = "/receive")
-//    @SendTo("/send")
-//    // SocketHandler는 1) /receive에서 메시지를 받고, /send로 메시지를 보내줍니다.
-//    // 정의한 SocketVO를 1) 인자값, 2) 반환값으로 사용합니다.
-//    public SocketVO SocketHandler(SocketVO socketVO) {
-//        // vo에서 getter로 userName을 가져옵니다.
-//        String userName = socketVO.getUserName();
-//        // vo에서 setter로 content를 가져옵니다.
-//        String content = socketVO.getContent();
-//
-//        // 생성자로 반환값을 생성합니다.
-//        SocketVO result = new SocketVO(userName, content);
-//        // 반환
-//        return result;
-//    }
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
     //Client가 SEND할 수 있는 경로
@@ -38,8 +23,9 @@ public class ChatController {
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatDto message){
 
-        log.info("# Create Chat Room , name: " + message.getRoomId() + " " + message.getWriter());
+        log.info("# Enter Chat Room , name: " + message.getRoomId() + " " + message.getWriter());
         message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
+        message.setWriter("");
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 

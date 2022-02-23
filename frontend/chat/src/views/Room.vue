@@ -1,7 +1,10 @@
 <template>
   <div>
         <div id="textarea">
-            <div v-bind:class=" { active: writer == message.writer } " v-for="(message,index) in messageList" :key="index" >{{message.writer}} : {{message.message}}</div>
+            <div v-bind:class=" { active: writer == message.writer } " v-for="(message,index) in messageList" :key="index" >
+                <div class="notice" v-if =" message.writer === '' "> {{message.message}}</div>
+                <div v-else >{{message.writer}} : {{message.message}}</div>
+            </div>
         </div>
         <div><input v-model="message" @keyup.enter="sendMessage()"> <button @click="sendMessage()" >메세지 보내기</button></div> 
   </div>
@@ -11,15 +14,18 @@
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import {getNewNickname} from '@/api/nickname.js'
+import {mapGetters} from 'vuex';
 
 export default {
     data(){
         return {
-            roomId : "",
             writer : "최",
             message : "",
             messageList : [],
         }
+    },
+    computed:{
+        ...mapGetters(['roomId'])
     },
     async created(){
         await getNewNickname(
@@ -31,8 +37,8 @@ export default {
                 this.$router.push( {name:'Main' });
             }
         )
-        this.roomId = this.$route.params.roomId;
         this.connect();
+        console.log(this.roomId);
     },
     methods : {
         sendMessage(){
@@ -47,7 +53,7 @@ export default {
             this.message = '';
         },
         connect() {
-            const serverURL = "http://localhost:8080/socket"
+            const serverURL = "http://10.10.1.85:8080/socket"
             let socket = new SockJS(serverURL);
             this.stompClient = Stomp.over(socket);
             console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
@@ -86,7 +92,7 @@ export default {
         }
     },
     beforeDestroy(){
-        console.log("des");
+        console.log("파괴전" + this.roomId)
         this.stompClient.unsubscribe("/sub/chat/room/"+this.roomId);
     }
 }
@@ -98,8 +104,17 @@ export default {
         width: 75vh;
         border: 1px solid black;
         overflow-y:auto;
+        display: flex;
+        flex-direction: column;
+        /* align-items: flex-end; */
     }
     .active{
-        float: right;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .notice{
+        background-color: aqua;
+        text-align: center;
     }
 </style>
