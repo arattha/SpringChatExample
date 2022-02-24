@@ -33,8 +33,20 @@ async function getChatRoom(callback, errorCallback){
         });
 }
 
+async function getRandomRoom(callback, errorCallback){
+    await axiosService
+        .get('/randomChat')
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+
 export {
     getChatRooms,
     createChatRoom,
-    getChatRoom
+    getChatRoom,
+    getRandomRoom
 }

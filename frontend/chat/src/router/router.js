@@ -15,6 +15,11 @@ const routes = [
       name: 'Room',
       component: () => import('@/views/Room.vue'),
     },
+    {
+      path: '/Random',
+      name: 'Random',
+      component: () => import('@/views/Random.vue'),
+    },
   ];
 
 const router = new VueRouter({

@@ -1,7 +1,7 @@
 package com.example.springchatexample.dto;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 public class RoomDto {
     private String roomId;
     private String name;
@@ -18,10 +19,12 @@ public class RoomDto {
     //WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
 
     public static RoomDto create(String name){
-        RoomDto room = new RoomDto();
 
-        room.roomId = UUID.randomUUID().toString();
-        room.name = name;
+        RoomDto room = RoomDto.builder()
+                .roomId(UUID.randomUUID().toString())
+                .name(name)
+                .build();
+
         return room;
     }
 }

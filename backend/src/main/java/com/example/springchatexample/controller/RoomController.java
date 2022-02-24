@@ -1,10 +1,11 @@
 package com.example.springchatexample.controller;
 
-import com.example.springchatexample.dao.ChatRepository;
 import com.example.springchatexample.dto.RequestRoom;
 import com.example.springchatexample.dto.RoomDto;
+import com.example.springchatexample.service.RoomService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ import java.util.List;
 @Slf4j
 public class RoomController {
 
-    private final ChatRepository repository;
+    //private final ChatRepository repository;
+    RoomService roomService;
 
     //채팅방 목록 조회
     @GetMapping(value = "/rooms")
@@ -25,19 +27,24 @@ public class RoomController {
 
         log.info("# All Chat Rooms");
 
-        return repository.findAllRooms();
+        return roomService.findAllRooms();
     }
 
     //채팅방 개설
     @PostMapping(value = "/room")
-    public ResponseEntity<RoomDto> create(@RequestBody RequestRoom requestRoom){
+    public ResponseEntity<String> create(@RequestBody RequestRoom requestRoom){
         log.info("# Create Chat Room , name: " + requestRoom.getRoomName());
-        if(requestRoom.getRoomName() == null){
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+        if(requestRoom.getRoomName() == ""){
+            return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
+        }
+        try {
+            roomService.createChatRoom(requestRoom.getRoomName());
+        }catch (DataAccessException e){
+            return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(repository.createChatRoomDTO(requestRoom.getRoomName()), HttpStatus.OK);
-        //return "redirect:/chat/rooms";
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     //채팅방 조회
@@ -47,6 +54,6 @@ public class RoomController {
         log.info("# get Chat Room, roomID : " + roomId);
 
         //model.addAttribute("room", repository.findRoomById(roomId));
-        return repository.findRoomById(roomId);
+        return roomService.findRoomById(roomId);
     }
 }
