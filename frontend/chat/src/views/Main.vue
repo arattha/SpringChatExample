@@ -8,6 +8,7 @@
       <a @click.prevent="move(item)">{{item.name}}</a>
       </div>
       <div><input v-model=newRoomName /> <button @click="createRoom()">채팅방 생성</button></div>
+      <div><button @click="random()">랜덤</button></div>
   </div>
 </template>
 
@@ -55,6 +56,9 @@ export default {
       console.log("이동중" , item.roomId);
       this.set_roomId(item.roomId);
       this.$router.push( {name:'Room'});
+    },
+    random(){
+      this.$router.push( {name:'Random'});
     }
   }
 }
