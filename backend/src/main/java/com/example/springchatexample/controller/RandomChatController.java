@@ -18,10 +18,8 @@ public class RandomChatController {
     @ResponseBody
     public DeferredResult<String> join(){
         String sessionId = ServletUtil.getSession().getId();
-        System.out.println(sessionId);
         final DeferredResult<String> deferredResult = new DeferredResult<>(null);
         randomChatService.join(sessionId,deferredResult);
-
 
         return deferredResult;
     }

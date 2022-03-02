@@ -16,15 +16,12 @@ public class RandomChatService {
     @Async("asyncTreadPool")
     public void join(String sessionId,DeferredResult<String> deferredResult) {
         pool.put(sessionId, deferredResult);
-
         createRoom();
-
     }
 
     private void createRoom() {
-        System.out.println("t");
         if(pool.size() < 2) return;
-        System.out.println("tt");
+
         Iterator<String> itr = pool.keySet().iterator();
         String user1 = itr.next();
         String user2 = itr.next();

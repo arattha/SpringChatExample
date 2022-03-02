@@ -5,7 +5,6 @@ import com.example.springchatexample.dto.RoomDto;
 import com.example.springchatexample.service.RoomService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,11 +37,8 @@ public class RoomController {
         if(requestRoom.getRoomName() == ""){
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
-        try {
-            roomService.createChatRoom(requestRoom.getRoomName());
-        }catch (DataAccessException e){
-            return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
-        }
+
+        roomService.createChatRoom(requestRoom.getRoomName());
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
@@ -50,10 +46,7 @@ public class RoomController {
     //채팅방 조회
     @GetMapping("/room")
     public RoomDto getRoom(String roomId){
-
         log.info("# get Chat Room, roomID : " + roomId);
-
-        //model.addAttribute("room", repository.findRoomById(roomId));
         return roomService.findRoomById(roomId);
     }
 }

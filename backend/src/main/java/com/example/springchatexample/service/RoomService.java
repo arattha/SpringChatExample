@@ -37,7 +37,6 @@ public class RoomService {
             return null;
         }
         return RoomAdaptor.entityToDto(room.get());
-        //return chatRoomDTOMap.get(id);
     }
 
     @Transactional
