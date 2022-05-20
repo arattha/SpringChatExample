@@ -13,7 +13,7 @@
 <script>
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
-import {getNewNickname} from '@/api/nickname.js'
+//import {getNewNickname} from '@/api/nickname.js'
 import {mapGetters} from 'vuex';
 
 export default {
@@ -25,18 +25,19 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['roomId'])
+        ...mapGetters(['roomId','nickname'])
     },
     async created(){
-        await getNewNickname(
-            (res) => {
-                this.writer= res.data.words[0]
-            },
-            () => {
-                alert("에러")
-                this.$router.push( {name:'Main' });
-            }
-        )
+        this.writer = this.nickname
+        // await getNewNickname(
+        //     (res) => {
+        //         this.writer= res.data.words[0]
+        //     },
+        //     () => {
+        //         alert("에러")
+        //         this.$router.push( {name:'Main' });
+        //     }
+        // )
         this.connect();
         console.log(this.roomId);
     },
@@ -53,7 +54,7 @@ export default {
             this.message = '';
         },
         connect() {
-            const serverURL = "http://10.10.1.85:8080/socket"
+            const serverURL = "http://10.10.25.236:8082/socket"
             let socket = new SockJS(serverURL);
             this.stompClient = Stomp.over(socket);
             console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)

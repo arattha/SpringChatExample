@@ -3,7 +3,7 @@ import axios from "axios";
 function createAxiosService(){
     return axios.create(
         {
-            baseURL: 'http://10.10.1.85:8080',
+            baseURL: 'http://10.10.25.236:8082',
             headers: {
                 'Content-type' : 'application/json',
             },
